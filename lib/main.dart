@@ -35,11 +35,7 @@ class MyApp extends StatelessWidget {
               ],
             ),
           ),
-          Icon(
-            Icons.star,
-            color: Colors.red[500],
-          ),
-          const Text('41'),
+        const FavoriteWidget(),
         ],
       ),
     );
@@ -110,6 +106,60 @@ class MyApp extends StatelessWidget {
               fontWeight: FontWeight.w400,
               color: color,
             ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class FavoriteWidget extends StatefulWidget {
+  const FavoriteWidget({super.key});
+
+  @override
+  State<FavoriteWidget> createState() => _FavoriteWidgetState();
+}
+
+
+//FavoriteWidgetStateにはウィジェットの存続期間中に変更される可能性のある可変データが格納される
+class _FavoriteWidgetState extends State<FavoriteWidget> {
+  bool _isFavorited = true;
+  int _favoriteCount = 41;
+
+  // ウィジェットの状態が変更されたこと、再描画する必要があることをフレームワークに伝えるためsetState（）の呼び出しは重要。
+  void _toggleFavorite() {
+  setState(() {
+    if (_isFavorited) {
+      _favoriteCount -= 1;
+      _isFavorited = false;
+    } else {
+      _favoriteCount += 1;
+      _isFavorited = true;
+    }
+  });
+}
+  // ···
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.all(0),
+          child: IconButton(
+            padding: const EdgeInsets.all(0),
+            alignment: Alignment.centerRight,
+            icon: (_isFavorited
+                ? const Icon(Icons.star)
+                : const Icon(Icons.star_border)),
+            color: Colors.red[500],
+            onPressed: _toggleFavorite,
+          ),
+        ),
+        SizedBox(
+          width: 18,
+          child: SizedBox(
+            child: Text('$_favoriteCount'),
           ),
         ),
       ],
